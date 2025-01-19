@@ -33,7 +33,7 @@ const FormBookingRoomChildren = () => {
       return;
      }
      if(phoneNumber?.length < 10){
-      toast.error("Your number must be 10 digits", {position:"top-center"})
+      toast.error("Your phone number must be 10 digits", {position:"top-center"})
       return;
      }
      if(roomNumber === ""){
@@ -83,15 +83,8 @@ const FormBookingRoomChildren = () => {
          price:price
         })
        })
-       let check = window.confirm("Do you want to save this data to database and show it on a browser ?")
-       if(check){
-        toast?.success("Room added successfully", {position:"top-center"})
-        setTimeout(() => {
-         navigate("/hotel/room/list")
-       },1000)
-      }else{
-        navigate("/")
-      }
+       toast?.success("Room added successfully", {position:"top-center"})
+       navigate("/hotel/room/list")
      }
     }
     return (
