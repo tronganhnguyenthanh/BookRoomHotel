@@ -38,7 +38,7 @@ const ShowHistoryBookingHotelRoom = () => {
   }
   const removeHotelBookingRoom = () => {
    setIsConfirm(localStorage.removeItem(`check_${objectId}`))
-   toast?.success(`You have checked out for the ${history?.roomCategory}`, {position:"top-center"})
+   toast?.success(`You have checked in for the ${history?.roomCategory}`, {position:"top-center"})
    setIsOpenModal(false)
   }
   const updateHistory = (objectId) => {
