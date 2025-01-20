@@ -13,11 +13,11 @@ const FormBookingRoom = () => {
                     </Nav>
                 </Col>
                 <Col lg="8">
-                    <Tab.Content>
-                        <Tab.Pane eventKey="add">
-                          <FormBookingRoomChildren/>
-                        </Tab.Pane>
-                    </Tab.Content>
+                  <Tab.Content>
+                    <Tab.Pane eventKey="add">
+                       <FormBookingRoomChildren/>
+                    </Tab.Pane>
+                  </Tab.Content>
                 </Col>
             </Row>
         </Tab.Container>

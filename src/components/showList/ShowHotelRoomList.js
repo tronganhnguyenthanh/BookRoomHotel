@@ -12,15 +12,15 @@ const ShowHotelRoomList = () => {
   }, [])
   const getHotelRoomList = async () => {
     let res = await fetch("https://parseapi.back4app.com/classes/bookingRoom", {
-      headers: {
-        "Content-Type": "application/json",
-        "X-Parse-Application-Id": "8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
-        "X-Parse-REST-API-Key": "d5VvkwjrD3Zrb40PSkJXEZ1Udmw0r4U4xPVg5kEv"
-      }
-    })
-    let list = await res?.json()
-    let resultHotelRoomList = await list?.results
-    setHotelRoomList(resultHotelRoomList)
+    headers:{
+     "Content-Type":"application/json",
+     "X-Parse-Application-Id":"8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
+     "X-Parse-REST-API-Key":"d5VvkwjrD3Zrb40PSkJXEZ1Udmw0r4U4xPVg5kEv"
+    }
+   })
+   let list = await res?.json()
+   let resultHotelRoomList = await list?.results
+   setHotelRoomList(resultHotelRoomList)
   }
   const showModalDeleteHotelRoom = async () => {
     setOpenModal(!openModal)
@@ -37,6 +37,9 @@ const ShowHotelRoomList = () => {
     toast?.success("Room deleted successfully", {position:"top-center"})
     getHotelRoomList()
   }
+  const editHotelRoom = (objectId) => {
+   navigate(`/hotel/edit/${objectId}`)
+  }
   return (
     <div>
       <ToastContainer />
@@ -50,6 +53,7 @@ const ShowHotelRoomList = () => {
             <summary className="text-xl text-violet-900 text-center">{i?.roomCategory}</summary>
             <Card className="w-80 m-auto">
               <img src={i?.files} alt="" className="cursor-pointer" onClick={() => navigate(`/hotel/detail/${i?.objectId}`)} />
+              <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800" onClick={() => editHotelRoom(i?.objectId)}>Edit</button>
               <button type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onClick={showModalDeleteHotelRoom}>Delete</button>
             </Card>
             <Modal show={openModal} popup onClose={() => setOpenModal(!openModal)}>

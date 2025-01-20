@@ -1,11 +1,13 @@
-import {Button} from "flowbite-react"
+import {Button, Modal} from "flowbite-react"
 import moment from "moment"
 import React, {useEffect, useState} from "react"
 import {Table} from "react-bootstrap"
+import {HiOutlineExclamationCircle} from "react-icons/hi"
 import {useNavigate, useParams} from "react-router-dom"
 import {toast, ToastContainer} from "react-toastify"
 const ShowHistoryBookingHotelRoom = () => {
   const [history, setHistory] = useState({})
+  const [isOpenModal, setIsOpenModal] = useState(false)
   const [isConfirm, setIsConfirm] = useState(false)
   const {objectId} = useParams()
   const navigate = useNavigate()
@@ -16,76 +18,83 @@ const ShowHistoryBookingHotelRoom = () => {
   },[objectId])
   const showHotelRoomHistory = async (objectId) => {
     const viewHistory = await fetch(`https://parseapi.back4app.com/classes/bookingRoom/${objectId}`, {
-      headers:{
-       "Content-Type":"application/json",
-       "X-Parse-Application-Id":"8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
-       "X-Parse-REST-API-Key":"d5VvkwjrD3Zrb40PSkJXEZ1Udmw0r4U4xPVg5kEv"
+      headers: {
+        "Content-Type": "application/json",
+        "X-Parse-Application-Id": "8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
+        "X-Parse-REST-API-Key": "d5VvkwjrD3Zrb40PSkJXEZ1Udmw0r4U4xPVg5kEv"
       },
     })
     let res = await viewHistory?.json()
     setHistory(res)
   }
   const confirmHotelBookingRoom = () => {
-   let check = window.confirm("Do you want to book this room ?")
-   if(check){
-    localStorage.setItem(`check_${objectId}`, !isConfirm)
-    setIsConfirm(localStorage.getItem(`check_${objectId}`))
-    toast?.success(`Your ${history?.roomCategory} has been booked`)
-   }else{
-     setIsConfirm(localStorage.removeItem(`check_${objectId}`))
-   }
+   localStorage.setItem(`check_${objectId}`, !isConfirm)
+   setIsConfirm(localStorage.getItem(`check_${objectId}`))
+   toast?.success(`Your ${history?.roomCategory} has been checked in`, {position:"top-center"})
+   setIsOpenModal(!isOpenModal)
+  }
+  const removeHotelBookingRoom = () => {
+   setIsConfirm(localStorage.removeItem(`check_${objectId}`))
+   setIsOpenModal(!isOpenModal)
   }
   return (
-   <div className="p-2">
-    <ToastContainer/>
-    <Table responsive striped bordered className="my-60">
-      <thead>
-        <tr>
-          <th className="text-center whitespace-nowrap">Customer's name</th>
-          <th className="text-center whitespace-nowrap">Room category</th>
-          <th className="text-center whitespace-nowrap">Room number</th>
-          <th className="text-center whitespace-nowrap">Check in</th>
-          <th className="text-center whitespace-nowrap">Check out</th>
-          <th className="text-center whitespace-nowrap">Price</th>
-          <th className="text-center whitespace-nowrap">Action</th>
-        </tr>  
-      </thead>
-      <tbody>
-        <tr>
-          <td className="text-center text-primary align-middle">{history?.customerName}</td>   
-          <td className="text-center text-info align-middle whitespace-nowrap">{history?.roomCategory}</td>   
-          <td className="text-center text-secondary align-middle">{history?.roomNumber}</td>   
-          <td className="text-center text-secondary align-middle whitespace-nowrap">{moment(history?.checkInDateTime).format("DD/MM/YYYY hh:mm:A")}</td>   
-          <td className="text-center text-secondary align-middle whitespace-nowrap">{moment(history?.checkOutDateTime).format("DD/MM/YYYY hh:mm:A")}</td>
-          <td className="text-center text-success align-middle">{history?.price}</td>
-          <td className="flex justify-center">
-           {
-             isConfirm 
-             ? 
-             <button 
-               type="button" 
-               className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" 
-               onClick={confirmHotelBookingRoom}
-               >
-                Booked
-             </button>
-             :
-             <button 
-               type="button" 
-               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-               onClick={confirmHotelBookingRoom}
-              >
-                 Book
-              </button>
-            }
-          </td>
-        </tr>
-      </tbody>
-    </Table>
-    <div className="flex justify-end">
-      <Button className="m-2" onClick={() => navigate(`/hotel/detail/${history?.objectId}`)}>Back</Button>
+    <div className="p-2">
+      <ToastContainer />
+      <Table responsive striped bordered className="my-60">
+        <thead>
+          <tr>
+            <th className="text-center whitespace-nowrap">Customer's name</th>
+            <th className="text-center whitespace-nowrap">Room category</th>
+            <th className="text-center whitespace-nowrap">Room number</th>
+            <th className="text-center whitespace-nowrap">Check in</th>
+            <th className="text-center whitespace-nowrap">Check out</th>
+            <th className="text-center whitespace-nowrap">Amount</th>
+            <th className="text-center whitespace-nowrap">Price</th>
+            <th className="text-center whitespace-nowrap">Total</th>
+            <th className="text-center whitespace-nowrap">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="text-center text-primary align-middle">{history?.customerName}</td>
+            <td className="text-center text-info align-middle whitespace-nowrap">{history?.roomCategory}</td>
+            <td className="text-center text-secondary align-middle">{history?.roomNumber}</td>
+            <td className="text-center text-secondary align-middle whitespace-nowrap">{moment(history?.checkInDateTime).format("DD/MM/YYYY hh:mm:A")}</td>
+            <td className="text-center text-secondary align-middle whitespace-nowrap">{moment(history?.checkOutDateTime).format("DD/MM/YYYY hh:mm:A")}</td>
+            <td className="text-center text-secondary align-middle">{history?.amount}</td>
+            <td className="text-center text-success align-middle">{"$" + history?.price}</td>
+            <td className="text-center text-success align-middle">{"$" + history?.price * history?.amount}</td>
+            <td className="flex justify-center">
+              {
+                isConfirm 
+                ? 
+                <Button color="blue" onClick={confirmHotelBookingRoom}>Check in</Button> 
+                : 
+                <Button color="failure" onClick={removeHotelBookingRoom}>Check out</Button>
+              }
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+      <Modal show={isOpenModal} onClose={() => setIsOpenModal(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h2 className="text-red-700">Do you want to book this room ?</h2>
+            <div className="flex justify-center gap-4">
+              <Button color="purple" onClick={confirmHotelBookingRoom}>Yes</Button>
+              <Button color="gray" onClick={removeHotelBookingRoom}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <div className="flex justify-end">
+        <Button className="m-2" onClick={() => navigate(`/hotel/detail/${history?.objectId}`)}>Back</Button>
+      </div>
     </div>
-   </div>
   )
 }
 

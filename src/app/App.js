@@ -3,6 +3,7 @@ import FormBookingRoom from "../components/addNewForm/FormBookingRoom";
 import ShowHotelRoomList from "../components/showList/ShowHotelRoomList";
 import ViewDetailHotelRoomList from "../components/showList/ViewDetailHotelRoomList";
 import ShowHistoryBookingHotelRoom from "../components/showBookingHotelRoomHistory/ShowHistoryBookingHotelRoom";
+import EditFormBookingRoom from "../components/addNewForm/EditFormBookingRoom";
 const App = () => {
  return (
   <div className="App">
@@ -10,6 +11,7 @@ const App = () => {
        <Route path="/" element={<FormBookingRoom/>}/>
        <Route path="/hotel/room/list" element={<ShowHotelRoomList/>}/>
        <Route path="/hotel/detail/:objectId" element={<ViewDetailHotelRoomList/>}/>
+       <Route path="/hotel/edit/:objectId" element={<EditFormBookingRoom/>}/>
        <Route path="/hotel/room/history/:objectId" element={<ShowHistoryBookingHotelRoom/>}/>
      </Routes>
   </div>

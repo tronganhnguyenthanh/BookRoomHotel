@@ -1,8 +1,16 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {Row, Col} from "react-bootstrap"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import {toast, ToastContainer} from "react-toastify"
 const EditFormBookingRoom = () => {
+  //  const [customerName, setCustomerName] = useState("")
+  //  const [phoneNumber, setPhoneNumber] = useState("")
+  //  const [roomNumber, setRoomNumber] = useState("")
+  //  const [roomCategory, setRoomCategory] = useState("")
+  //  const [checkInDateTime, setCheckInDateTime] = useState("")
+  //  const [checkOutDateTime, setCheckOutDateTime] = useState("")
+  //  const [period, setPeriod] = useState("")
+  //  const [price, setPrice] = useState("")
    const init_data = {
     customerName:"",
     phoneNumber:"",
@@ -16,10 +24,26 @@ const EditFormBookingRoom = () => {
    }
    const [data, setData] = useState(init_data)
    const [files, setFiles] = useState([])
+   const {objectId} = useParams()
+  //  const [editHotelRoom, setEditHotelRoom] = useState({})
    const handleOnChange = (e) => {
     let new_data = {...data}
     new_data[e?.target?.name] = e?.target?.value
     setData(new_data)
+   }
+   useEffect(() => {
+    getEditHotelRoom(objectId)
+   },[objectId])
+   const getEditHotelRoom = async (objectId) => {
+    const editRoomDetail = await fetch(`https://parseapi.back4app.com/classes/bookingRoom/${objectId}`, {
+      headers:{
+       "Content-Type":"application/json",
+       "X-Parse-Application-Id":"8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
+       "X-Parse-REST-API-Key":"d5VvkwjrD3Zrb40PSkJXEZ1Udmw0r4U4xPVg5kEv"
+      },
+    })
+    let res = await editRoomDetail?.json()
+    setData(res)
    }
    const navigate = useNavigate()
    const uploadImage = (e) => {
@@ -32,7 +56,7 @@ const EditFormBookingRoom = () => {
      reader?.readAsDataURL(imageUpload)
      }
     }
-    const addHotelRoom = async (objectId) => {
+    const editHotelRoom = async (objectId) => {
      if(data?.customerName === ""){
       toast.error("Please enter your name", {position:"top-center"})
       return;
@@ -77,8 +101,8 @@ const EditFormBookingRoom = () => {
       toast.error("Please enter your price", {position:"top-center"})
       return
      }else{
-       await fetch("https://parseapi.back4app.com/classes/bookingRoom", {
-        method:"POST",
+       await fetch(`https://parseapi.back4app.com/classes/bookingRoom/${objectId}`, {
+        method:"PUT",
         headers:{
          "Content-Type":"application/json",
          "X-Parse-Application-Id":"8Sl7RTqKI34etawn9SEAVhNzuuGLwaBoVRpE9qeF",
@@ -97,12 +121,12 @@ const EditFormBookingRoom = () => {
          amount:parseInt(data?.amount)
         })
        })
-       toast?.success("Room added successfully", {position:"top-center"})
+       toast?.success("Room updated successfully", {position:"top-center"})
        navigate("/hotel/room/list")
      }
     }
     return (
-        <div className="right-layout">
+        <div className="left-layout">
             <ToastContainer/>
             <Row>
                 <Col lg="6">
@@ -218,9 +242,9 @@ const EditFormBookingRoom = () => {
                <button 
                  type="button" 
                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 m-2"
-                 onClick={addHotelRoom}
+                 onClick={() => editHotelRoom(objectId)}
                 >
-                  Apply
+                  Update
                </button>
             </div>
         </div>

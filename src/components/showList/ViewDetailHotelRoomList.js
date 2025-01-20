@@ -31,7 +31,7 @@ const ViewDetailHotelRoomList = () => {
       <div className="text-center text-gray-500">{viewHotelRoomDetail?.customerName}</div>
       <div className="text-center text-amber-500">{moment(viewHotelRoomDetail?.checkInDateTime).format("DD/MM/YYYY hh:mm:A")}</div>   
       <div className="text-center text-amber-900">{moment(viewHotelRoomDetail?.checkOutDateTime).format("DD/MM/YYYY hh:mm:A")}</div>
-      <p className="text-center text-emerald-600">{viewHotelRoomDetail?.price}</p>
+      <p className="text-center text-emerald-600">{"$" + viewHotelRoomDetail?.price}</p>
       <div className="flex justify-center">
         <button type="button" className="bg-blue-700 p-2 text-white rounded-lg m-2" onClick={bookHotelRoom}>Book a room</button>
         <button type="button" className="bg-gray-500 p-2 text-white rounded-lg m-2" onClick={() => navigate("/hotel/room/list")}>Go back</button>
