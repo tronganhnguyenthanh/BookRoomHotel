@@ -23,13 +23,17 @@ html{
 }
 
 .btn-view{
-  width:90%;
+  width:96%;
   height:auto;
-  margin:10px;
   padding:12px;
-  background-color:burlywood !important;
   text-align:center;
   color:#fff !important;
+  background-color:#fff !important;
+}
+
+.btn-reset{
+  width:91%;
+  margin:12px;
 }
 
 .right-layout{
