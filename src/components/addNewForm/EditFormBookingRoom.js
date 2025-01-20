@@ -3,14 +3,6 @@ import {Row, Col} from "react-bootstrap"
 import {useNavigate, useParams} from "react-router-dom"
 import {toast, ToastContainer} from "react-toastify"
 const EditFormBookingRoom = () => {
-  //  const [customerName, setCustomerName] = useState("")
-  //  const [phoneNumber, setPhoneNumber] = useState("")
-  //  const [roomNumber, setRoomNumber] = useState("")
-  //  const [roomCategory, setRoomCategory] = useState("")
-  //  const [checkInDateTime, setCheckInDateTime] = useState("")
-  //  const [checkOutDateTime, setCheckOutDateTime] = useState("")
-  //  const [period, setPeriod] = useState("")
-  //  const [price, setPrice] = useState("")
    const init_data = {
     customerName:"",
     phoneNumber:"",
@@ -25,7 +17,6 @@ const EditFormBookingRoom = () => {
    const [data, setData] = useState(init_data)
    const [files, setFiles] = useState([])
    const {objectId} = useParams()
-  //  const [editHotelRoom, setEditHotelRoom] = useState({})
    const handleOnChange = (e) => {
     let new_data = {...data}
     new_data[e?.target?.name] = e?.target?.value
@@ -122,7 +113,7 @@ const EditFormBookingRoom = () => {
         })
        })
        toast?.success("Room updated successfully", {position:"top-center"})
-       navigate("/hotel/room/list")
+       navigate(`/hotel/room/history/${objectId}`)
      }
     }
     return (

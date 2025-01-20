@@ -62,4 +62,8 @@ summary::marker{
    width:98%;
    margin:auto;
  }
+
+ .wrapper{
+   display:none !important;
+ }
 }

@@ -27,15 +27,22 @@ const ShowHistoryBookingHotelRoom = () => {
     let res = await viewHistory?.json()
     setHistory(res)
   }
+  const showConfirmHotelBookingRoom = () => {
+   setIsOpenModal(!isOpenModal)
+  }
   const confirmHotelBookingRoom = () => {
    localStorage.setItem(`check_${objectId}`, !isConfirm)
    setIsConfirm(localStorage.getItem(`check_${objectId}`))
    toast?.success(`Your ${history?.roomCategory} has been checked in`, {position:"top-center"})
-   setIsOpenModal(!isOpenModal)
+   showConfirmHotelBookingRoom()
   }
   const removeHotelBookingRoom = () => {
    setIsConfirm(localStorage.removeItem(`check_${objectId}`))
-   setIsOpenModal(!isOpenModal)
+   toast?.success(`You have checked out for the ${history?.roomCategory}`, {position:"top-center"})
+   setIsOpenModal(false)
+  }
+  const updateHistory = (objectId) => {
+   navigate(`/hotel/edit/${objectId}`)
   }
   return (
     <div className="p-2">
@@ -56,7 +63,7 @@ const ShowHistoryBookingHotelRoom = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="text-center text-primary align-middle">{history?.customerName}</td>
+            <td className="text-center text-primary align-middle text-nowrap">{history?.customerName}</td>
             <td className="text-center text-info align-middle whitespace-nowrap">{history?.roomCategory}</td>
             <td className="text-center text-secondary align-middle">{history?.roomNumber}</td>
             <td className="text-center text-secondary align-middle whitespace-nowrap">{moment(history?.checkInDateTime).format("DD/MM/YYYY hh:mm:A")}</td>
@@ -64,11 +71,11 @@ const ShowHistoryBookingHotelRoom = () => {
             <td className="text-center text-secondary align-middle">{history?.amount}</td>
             <td className="text-center text-success align-middle">{"$" + history?.price}</td>
             <td className="text-center text-success align-middle">{"$" + history?.price * history?.amount}</td>
-            <td className="flex justify-center">
+            <td className="flex justify-center text-nowrap">
               {
-                isConfirm 
+                !isConfirm 
                 ? 
-                <Button color="blue" onClick={confirmHotelBookingRoom}>Check in</Button> 
+                <Button color="blue" onClick={showConfirmHotelBookingRoom}>Check in</Button> 
                 : 
                 <Button color="failure" onClick={removeHotelBookingRoom}>Check out</Button>
               }
@@ -84,7 +91,7 @@ const ShowHistoryBookingHotelRoom = () => {
             <h2 className="text-red-700">Do you want to book this room ?</h2>
             <div className="flex justify-center gap-4">
               <Button color="purple" onClick={confirmHotelBookingRoom}>Yes</Button>
-              <Button color="gray" onClick={removeHotelBookingRoom}>
+              <Button color="gray" onClick={showConfirmHotelBookingRoom}>
                 No, cancel
               </Button>
             </div>
@@ -93,6 +100,7 @@ const ShowHistoryBookingHotelRoom = () => {
       </Modal>
       <div className="flex justify-end">
         <Button className="m-2" onClick={() => navigate(`/hotel/detail/${history?.objectId}`)}>Back</Button>
+        <Button color="purple" className="m-2" onClick={() => updateHistory(objectId)}>Update history</Button>
       </div>
     </div>
   )
