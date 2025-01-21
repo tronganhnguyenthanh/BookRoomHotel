@@ -69,12 +69,12 @@ const EditFormBookingRoom = () => {
       toast.error("Please choose your period", {position:"top-center"})
       return
      }
-     if(data?.amount === ""){
-      toast.error("Please enter your amount", {position:"top-center"})
-      return
-     }
      if(data?.price === ""){
       toast.error("Please enter your price", {position:"top-center"})
+      return
+     }
+     if(data?.amount === ""){
+      toast.error("Please choose your amount", {position:"top-center"})
       return
      }else{
        await fetch("https://parseapi.back4app.com/classes/bookingRoom", {
