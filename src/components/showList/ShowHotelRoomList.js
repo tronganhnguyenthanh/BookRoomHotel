@@ -36,6 +36,7 @@ const ShowHotelRoomList = () => {
     })
     toast?.success("Room deleted successfully", {position:"top-center"})
     getHotelRoomList()
+    showModalDeleteHotelRoom()
   }
   const editHotelRoom = (objectId) => {
    navigate(`/hotel/edit/${objectId}`)
@@ -62,8 +63,8 @@ const ShowHotelRoomList = () => {
                   <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
                   <h2 className="text-red-700">Do you want to delete this room ?</h2>
                   <div className="flex justify-center gap-4">
-                    <Button color="failure" onClick={() => deleteHotelRoom(i?.objectId)}>Yes, I'm sure</Button>
-                    <Button color="gray" onClick={() => setOpenModal(!openModal)}>
+                    <Button color="failure" className="text-nowrap "onClick={() => deleteHotelRoom(i?.objectId)}>Yes, I'm sure</Button>
+                    <Button color="gray" className="text-nowrap" onClick={() => setOpenModal(!openModal)}>
                       No, cancel
                     </Button>
                   </div>
