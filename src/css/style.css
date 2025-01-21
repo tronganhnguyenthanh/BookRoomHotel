@@ -68,6 +68,7 @@ summary::marker{
  }
 
  .wrapper{
-   display:none !important;
+   width:100% !important;
+   border:none;
  }
 }
